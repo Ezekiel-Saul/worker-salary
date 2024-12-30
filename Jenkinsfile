@@ -14,7 +14,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Using the GITHUB_CREDENTIALS for authentication if needed
-                git branch: 'main', url: "${GITHUB_REPO_URL}", credentialsId: 'github-credentials'
+                git branch: 'master', url: "${GITHUB_REPO_URL}", credentialsId: 'github-credentials'
             }
         }
 
