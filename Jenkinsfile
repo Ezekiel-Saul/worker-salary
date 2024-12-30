@@ -31,10 +31,11 @@ pipeline {
        }
 
 
-
         stage('Test') {
             steps {
-                sh 'mvn test'
+                withMaven(maven: 'M3', jdk: 'JDK_17') {
+                    sh 'mvn test'
+                }
             }
         }
 
