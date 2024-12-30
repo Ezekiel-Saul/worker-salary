@@ -2,6 +2,7 @@ pipeline {
     agent any
      tools {
             jdk 'JDK_17' // This name must match the one in Global Tool Configuration
+            maven 'M3'
         }
     environment {
         // Docker Hub credentials
