@@ -27,6 +27,8 @@ pipeline {
             }
         }
 
+
+
         stage('Test') {
             steps {
                 sh 'mvn test'
@@ -42,6 +44,8 @@ pipeline {
                 }
             }
         }
+
+
 
         stage('Push Docker Images') {
             steps {
