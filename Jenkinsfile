@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+     tools {
+            jdk 'JDK_21' // This name must match the one in Global Tool Configuration
+        }
     environment {
         // Docker Hub credentials
         DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials-id')
@@ -19,13 +21,13 @@ pipeline {
         }
 
 
-        stage('Build') {
-            steps {
-                withMaven(maven: 'M3') {
-                    sh 'mvn clean package -DskipTests'
-                }
-            }
-        }
+       stage('Build') {
+                   steps {
+                       withMaven(maven: 'M3', jdk: 'JDK_21') {
+                           sh 'mvn clean package -DskipTests'
+                       }
+                   }
+       }
 
 
 
