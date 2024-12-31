@@ -11,6 +11,12 @@ pipeline {
         GITHUB_REPO_URL = 'https://github.com/Ezekiel-Saul/worker-salary.git'
         // GitHub credentials for additional operations if needed
         GITHUB_CREDENTIALS = credentials('github-credentials')
+
+         // Heroku app names
+                HEROKU_APP_SERVICE1 = 'service1-app'
+                HEROKU_APP_SERVICE2 = 'service2-app'
+                // Heroku API key
+                HEROKU_API_KEY = credentials('heroku-api-key')
     }
 
     stages {
@@ -60,12 +66,26 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            steps {
-                // Here's where you would deploy. Since we're focusing on free solutions:
-                // Deploy to a local test server or VM for free
-                sh 'docker-compose up -d'
-            }
-        }
+         stage('Deploy to Heroku') {
+                    steps {
+                        script {
+                            withCredentials([string(credentialsId: 'heroku-api-key', variable: 'HEROKU_API_KEY')]) {
+                                sh '''
+                                echo "Logging into Heroku"
+                                echo $HEROKU_API_KEY | heroku login -i
+
+                                echo "Deploying service1 to Heroku"
+                                heroku container:login
+                                heroku container:push web --app $HEROKU_APP_SERVICE1
+                                heroku container:release web --app $HEROKU_APP_SERVICE1
+
+                                echo "Deploying service2 to Heroku"
+                                heroku container:push web --app $HEROKU_APP_SERVICE2
+                                heroku container:release web --app $HEROKU_APP_SERVICE2
+                                '''
+                            }
+                        }
+                    }
+         }
     }
 }
