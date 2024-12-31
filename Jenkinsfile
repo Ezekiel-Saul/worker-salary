@@ -54,7 +54,14 @@ pipeline {
             }
         }
 
-
+        stage('Tag Docker Images for Heroku') {
+            steps {
+                sh '''
+                docker tag service1:latest registry.heroku.com/$HEROKU_APP_SERVICE1/web
+                docker tag service2:latest registry.heroku.com/$HEROKU_APP_SERVICE2/web
+                '''
+            }
+        }
 
         stage('Push Docker Images') {
             steps {
