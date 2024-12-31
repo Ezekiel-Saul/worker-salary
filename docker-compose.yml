@@ -2,7 +2,7 @@
 services:
   service1:
     build: ./service1
-    image: service1:latest
+    image: zqlsaul/service1:latest
     ports:
       - "8083:8083"
     environment:
@@ -11,7 +11,7 @@ services:
 
   service2:
     build: ./service2
-    image: service2:latest
+    image: zqlsaul/service2:latest
     ports:
       - "8082:8082"
     environment:
