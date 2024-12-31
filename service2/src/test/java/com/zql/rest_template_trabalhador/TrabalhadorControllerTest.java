@@ -7,32 +7,29 @@ import com.zql.rest_template_trabalhador.service.TrabalhadorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
-@SpringBootTest
+
+@WebMvcTest(TrabalhadorController.class)
 public class TrabalhadorControllerTest {
 
     @Autowired
-    private TrabalhadorController trabalhadorController;
+    private MockMvc mockMvc;
 
     @MockBean
     private TrabalhadorService trabalhadorService;
 
-    private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setup() {
         objectMapper = new ObjectMapper();
-        // Manually set up MockMvc with the controller and mocked service
-        mockMvc = standaloneSetup(trabalhadorController).build();
     }
 
     @Test
@@ -61,7 +58,7 @@ public class TrabalhadorControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("true")); // Expecting a boolean response
 
-        // Verify that delTrabalhador was called with ID 3
+        // Verify that delTrabalhador was called with ID 1
         verify(trabalhadorService, times(1)).delTrabalhador(3);
     }
 }

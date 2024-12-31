@@ -24,18 +24,17 @@ pipeline {
 
        stage('Build') {
                    steps {
-                       withMaven(maven: 'M3', jdk: 'JDK_17') {
-                           sh 'mvn clean package -DskipTests'
+                       withMaven(maven: 'M3') {
+                           sh 'mvn clean package'
                        }
                    }
        }
 
 
+
         stage('Test') {
             steps {
-                withMaven(maven: 'M3', jdk: 'JDK_17') {
-                    sh 'mvn test'
-                }
+                sh 'mvn test'
             }
         }
 
