@@ -65,27 +65,37 @@ pipeline {
                 }
             }
         }
+        stage('Test Heroku Authentication') {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'heroku-api-key', variable: 'HEROKU_API_KEY')]) {
+                        sh '''
+                        heroku auth:token ${HEROKU_API_KEY}
+                        heroku auth:whoami
+                        '''
+                    }
+                }
+            }
+        }
 
          stage('Deploy to Heroku') {
-                    steps {
-                        script {
-                            withCredentials([string(credentialsId: 'heroku-api-key', variable: 'HEROKU_API_KEY')]) {
-                                sh '''
-                                echo "Logging into Heroku"
-                                echo $HEROKU_API_KEY | heroku login -i
+             steps {
+                 script {
+                     withCredentials([string(credentialsId: 'heroku-api-key', variable: 'HEROKU_API_KEY')]) {
+                         sh '''
+                         echo "Logging into Heroku"
+                         heroku auth:token ${HEROKU_API_KEY}
+                         heroku container:login
+                         heroku container:push web --app $HEROKU_APP_SERVICE1
+                         heroku container:release web --app $HEROKU_APP_SERVICE1
 
-                                echo "Deploying service1 to Heroku"
-                                heroku container:login
-                                heroku container:push web --app $HEROKU_APP_SERVICE1
-                                heroku container:release web --app $HEROKU_APP_SERVICE1
-
-                                echo "Deploying service2 to Heroku"
-                                heroku container:push web --app $HEROKU_APP_SERVICE2
-                                heroku container:release web --app $HEROKU_APP_SERVICE2
-                                '''
-                            }
-                        }
-                    }
+                         echo "Deploying service2 to Heroku"
+                         heroku container:push web --app $HEROKU_APP_SERVICE2
+                         heroku container:release web --app $HEROKU_APP_SERVICE2
+                         '''
+                     }
+                 }
+             }
          }
     }
 }
