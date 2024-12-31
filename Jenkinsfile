@@ -86,8 +86,16 @@ pipeline {
                          echo "Logging into Heroku"
                          heroku auth:token ${HEROKU_API_KEY}
                          heroku container:login
+
+                         # Set container stack for service1-app
+                         heroku stack:set container --app $HEROKU_APP_SERVICE1
+
+                         echo "Deploying service1 to Heroku"
                          heroku container:push web --app $HEROKU_APP_SERVICE1
                          heroku container:release web --app $HEROKU_APP_SERVICE1
+
+                         # Set container stack for service2-app
+                         heroku stack:set container --app $HEROKU_APP_SERVICE2
 
                          echo "Deploying service2 to Heroku"
                          heroku container:push web --app $HEROKU_APP_SERVICE2
